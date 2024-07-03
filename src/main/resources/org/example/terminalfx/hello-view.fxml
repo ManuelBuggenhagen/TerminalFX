@@ -1,22 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.terminalfx.Controller">
    <children>
       <AnchorPane fx:id="mainWindowAP" prefHeight="720.0" prefWidth="1280.0" visible="false">
          <children>
-            <Label layoutX="550.0" layoutY="24.0" prefHeight="95.0" prefWidth="142.0" text="MainSide Label" />
-            <JFXButton fx:id="logoutBT" layoutX="614.0" layoutY="403.0" prefHeight="84.0" prefWidth="124.0" text="abmelden" />
+            <Label alignment="CENTER" layoutX="468.0" layoutY="25.0" prefHeight="54.0" prefWidth="316.0" text="Sie sind eingeloggt:">
+               <font>
+                  <Font name="Arial Bold" size="25.0" />
+               </font></Label>
+            <JFXButton fx:id="logoutBT" buttonType="RAISED" contentDisplay="TOP" layoutX="540.0" layoutY="556.0" prefHeight="119.0" prefWidth="172.0" styleClass="loginBT" text="abmelden">
+               <graphic>
+                  <ImageView fitHeight="85.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="Arial Bold" size="20.0" />
+               </font></JFXButton>
+            <Label fx:id="nameLabel" alignment="CENTER" layoutX="415.0" layoutY="71.0" prefHeight="54.0" prefWidth="422.0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <GridPane layoutX="203.0" layoutY="187.0" prefHeight="347.0" prefWidth="875.0">
+              <columnConstraints>
+                <ColumnConstraints />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="560.0" minWidth="10.0" prefWidth="558.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="579.0" minWidth="10.0" prefWidth="558.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <JFXButton fx:id="profilBT" buttonType="RAISED" contentDisplay="TOP" prefHeight="364.0" prefWidth="453.0" styleClass="loginBT" text="Profil einsehen" GridPane.columnIndex="1">
+                     <graphic>
+                        <ImageView fitHeight="227.0" fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/user.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="Arial Bold" size="20.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="vertragBT" buttonType="RAISED" contentDisplay="TOP" prefHeight="434.0" prefWidth="438.0" styleClass="loginBT" text="Vertrag beantragen" GridPane.columnIndex="2">
+                     <graphic>
+                        <ImageView fitHeight="236.0" fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/contract2.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </GridPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="loginAP" prefHeight="720.0" prefWidth="1280.0">
+      <AnchorPane fx:id="loginAP" prefHeight="720.0" prefWidth="1280.0" visible="false">
          <children>
             <JFXButton fx:id="loginBT" contentDisplay="TOP" layoutX="519.0" layoutY="480.0" prefHeight="114.0" prefWidth="193.0" styleClass="loginBT" text=" ">
                <graphic>
@@ -38,6 +98,76 @@
                   <Font name="Arial Bold" size="30.0" />
                </font>
             </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="profilAP" prefHeight="720.0" prefWidth="1280.0" visible="false">
+         <children>
+            <Label text="profil" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="vertragAP" prefHeight="720.0" prefWidth="1280.0">
+         <children>
+            <Label alignment="CENTER" layoutX="286.0" layoutY="30.0" prefHeight="64.0" prefWidth="708.0" text="hier kannst du einen neuen Vertrag beantragen:">
+               <font>
+                  <Font name="Arial Bold" size="25.0" />
+               </font></Label>
+            <Label layoutX="272.0" layoutY="168.0" prefHeight="54.0" prefWidth="199.0" text="Wähle ein Angebot aus:">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="angebotChoice" layoutX="484.0" layoutY="183.0" prefWidth="150.0" />
+            <Label fx:id="angbeschreibungLabel" layoutX="694.0" layoutY="169.0" prefHeight="54.0" prefWidth="506.0" text="noch kein angebot ausgewählt">
+               <font>
+                  <Font name="Arial Italic" size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="200.0" layoutY="250.0" prefHeight="54.0" prefWidth="271.0" text="Wann soll dein Vertrag beginnen?">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font>
+            </Label>
+            <DatePicker fx:id="beginnChoice" layoutX="486.0" layoutY="265.0" />
+            <Label layoutX="61.0" layoutY="333.0" prefHeight="54.0" prefWidth="422.0" text="Was für eine Laufzeit soll der Vertrag haben? (in Jahren)">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="dauerChoice" layoutX="484.0" layoutY="348.0" prefWidth="150.0" />
+            <Label layoutX="155.0" layoutY="408.0" prefHeight="54.0" prefWidth="338.0" text="Warum willst du diesen Antrag beantragen?">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font>
+            </Label>
+            <TextArea fx:id="grundTF" layoutX="486.0" layoutY="426.0" prefHeight="161.0" prefWidth="718.0" promptText="gib hier deine Beweggründe an">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </TextArea>
+            <JFXButton fx:id="sendenBT" buttonType="RAISED" contentDisplay="TOP" layoutX="559.0" layoutY="609.0" prefHeight="64.0" prefWidth="150.0" text="Antrag senden">
+               <graphic>
+                  <ImageView fitHeight="53.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/file2.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="Arial Bold" size="15.0" />
+               </font>
+            </JFXButton>
+            <JFXButton fx:id="zuruckBT1" contentDisplay="TOP" layoutX="61.0" layoutY="50.0" prefHeight="84.0" prefWidth="150.0" text="zurück">
+               <graphic>
+                  <ImageView fitHeight="78.0" fitWidth="113.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/left-arrow.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font>
+            </JFXButton>
          </children>
       </AnchorPane>
       <ImageView fitHeight="720.0" fitWidth="1280.0" mouseTransparent="true" opacity="0.1" pickOnBounds="true" visible="false">
