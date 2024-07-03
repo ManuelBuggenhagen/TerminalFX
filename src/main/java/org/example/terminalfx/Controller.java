@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import oracle.jdbc.OracleTypes;
 
 import java.net.URL;
@@ -13,6 +12,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -41,9 +41,31 @@ public class Controller implements Initializable {
     @FXML
     private JFXButton zuruckBT1;
     @FXML
+    private JFXButton zuruckBT2;
+    @FXML
     private JFXButton sendenBT;
     @FXML
     private Label nameLabel;
+    @FXML
+    private Label vornameLB;
+    @FXML
+    private Label nachnameLB;
+    @FXML
+    private Label wohnortLB;
+    @FXML
+    private Label geburtsdatumLB;
+    @FXML
+    private Label zelleLB;
+    @FXML
+    private Label gefangnissLB;
+    @FXML
+    private Label punkteLB;
+    @FXML
+    private Label kontoLB;
+    @FXML
+    private Label allevertrageLB;
+    @FXML
+    private Label erstelltamLB;
     @FXML
     private Label angbeschreibungLabel;
     @FXML
@@ -95,8 +117,15 @@ public class Controller implements Initializable {
         });
 
         vertragBT.setOnMouseClicked(event -> {
-            String[] alleAngebote = options();
+
+            beginnChoice.getEditor().clear();
+            angbeschreibungLabel.setText(" ");
+            grundTF.setText(" ");
+
             angebotChoice.getItems().clear();
+            angebotChoice.getSelectionModel().clearSelection();
+
+            String[] alleAngebote = options();
             angebotChoice.getItems().addAll(alleAngebote);
             dauerChoice.getItems().clear();
             dauerChoice.getItems().addAll("1", "2", "3", "4", "noch nicht sicher");
@@ -105,6 +134,7 @@ public class Controller implements Initializable {
         });
 
         profilBT.setOnMouseClicked(event -> {
+            fillPrisonerData();
             mainWindowAP.setVisible(false);
             profilAP.setVisible(true);
         });
@@ -114,9 +144,16 @@ public class Controller implements Initializable {
             mainWindowAP.setVisible(true);
         });
 
+        zuruckBT2.setOnMouseClicked(event -> {
+            profilAP.setVisible(false);
+            mainWindowAP.setVisible(true);
+        });
+
         angebotChoice.setOnAction(event -> {
-            String description = angebotDescrList.get(angebotChoice.getSelectionModel().getSelectedIndex());
-            angbeschreibungLabel.setText(description);
+            if (!angebotChoice.getSelectionModel().isEmpty()) {
+                String description = angebotDescrList.get(angebotChoice.getSelectionModel().getSelectedIndex());
+                angbeschreibungLabel.setText(description);
+            }
         });
 
         sendenBT.setOnMouseClicked(event -> {
@@ -249,7 +286,7 @@ public class Controller implements Initializable {
             cs.setString(3, startDate);
             cs.setString(4, endDate);
             cs.setString(5, notiz);
-            //cs.execute();
+            cs.execute();
             con.close();
             System.out.println("neuer Vertrag wurde eingefügt");
 
@@ -272,7 +309,66 @@ public class Controller implements Initializable {
     }
 
     private String calcEndDate() {
-        return "test";
+        if (dauerChoice.getValue().equals("noch nicht sicher")) {
+            return null;
+        } else {
+            String start = buildStartDate();
+            String year = start.substring(start.length() - 4);
+            String rest = start.substring(0, 6);
+            int dauer = Integer.parseInt(dauerChoice.getValue());
+            dauer = dauer + Integer.parseInt(year);
+            String endDate = rest + dauer;
+            return endDate;
+        }
+    }
+
+    private void fillPrisonerData() {
+        Connection conn = null;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            String username = "DieKnastiGmbH";
+            String passwort = "DieKnastiGmbH";
+            String url = "jdbc:oracle:thin:@rs03-db-inf-min.ad.fh-bielefeld.de:1521:ORCL";
+            conn = DriverManager.getConnection(url, username, passwort);
+            System.out.println("connected successfully!");
+            String query = "{call getGefangenenDaten(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            CallableStatement stmt = conn.prepareCall(query);
+            stmt.setInt(1, userID);
+            stmt.registerOutParameter(2, Types.VARCHAR);
+            stmt.registerOutParameter(3, Types.VARCHAR);
+            stmt.registerOutParameter(4, Types.VARCHAR);
+            stmt.registerOutParameter(5, Types.VARCHAR);
+            stmt.registerOutParameter(6, Types.VARCHAR);
+            stmt.registerOutParameter(7, Types.VARCHAR);
+            stmt.registerOutParameter(8, Types.NUMERIC);
+            stmt.registerOutParameter(9, Types.NUMERIC);
+            stmt.registerOutParameter(10, Types.VARCHAR);
+            stmt.registerOutParameter(11, Types.DATE);
+            stmt.execute();
+
+            vornameLB.setText(stmt.getString(2));
+            nachnameLB.setText(stmt.getString(3));
+            wohnortLB.setText(stmt.getString(4));
+            geburtsdatumLB.setText(stmt.getString(5));
+            zelleLB.setText(stmt.getString(6));
+            gefangnissLB.setText(stmt.getString(7));
+            punkteLB.setText(stmt.getString(8));
+            kontoLB.setText(stmt.getString(9));
+            allevertrageLB.setText(stmt.getString(10));
+            erstelltamLB.setText(String.valueOf(stmt.getDate(11)));
+
+            conn.close();
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.printf(ex.getMessage());
+            try {
+                assert conn != null;
+                conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
 
