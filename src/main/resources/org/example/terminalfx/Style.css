@@ -1,0 +1,13 @@
+.background{
+    -fx-background-color: #bbbbbb;
+}
+
+.loginBT:hover{
+    -fx-background-color: #787878;
+}
+
+
+
+.test{
+    -fx-background-color: #0A4969;
+}

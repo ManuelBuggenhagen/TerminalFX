@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.terminalfx.Controller">
+   <children>
+      <AnchorPane fx:id="mainWindowAP" prefHeight="720.0" prefWidth="1280.0" visible="false">
+         <children>
+            <Label layoutX="550.0" layoutY="24.0" prefHeight="95.0" prefWidth="142.0" text="MainSide Label" />
+            <JFXButton fx:id="logoutBT" layoutX="614.0" layoutY="403.0" prefHeight="84.0" prefWidth="124.0" text="abmelden" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="loginAP" prefHeight="720.0" prefWidth="1280.0">
+         <children>
+            <JFXButton fx:id="loginBT" contentDisplay="TOP" layoutX="519.0" layoutY="480.0" prefHeight="114.0" prefWidth="193.0" styleClass="loginBT" text=" ">
+               <graphic>
+                  <ImageView fitHeight="110.0" fitWidth="109.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/log-in.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <Label alignment="CENTER" layoutX="441.0" layoutY="289.0" prefHeight="71.0" prefWidth="399.0" text="bitte gib hier deine insassen id ein!">
+               <font>
+                  <Font name="Arial Bold" size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="loginTB" layoutX="512.0" layoutY="369.0" prefHeight="47.0" prefWidth="207.0" promptText="z.B. 36" />
+            <Label alignment="CENTER" layoutX="374.0" layoutY="70.0" prefHeight="104.0" prefWidth="533.0" text="Wilkommen im Verwaltungssystem" underline="true" wrapText="true">
+               <font>
+                  <Font name="Arial Bold" size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <ImageView fitHeight="720.0" fitWidth="1280.0" mouseTransparent="true" opacity="0.1" pickOnBounds="true" visible="false">
+         <image>
+            <Image url="@images/logo.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
