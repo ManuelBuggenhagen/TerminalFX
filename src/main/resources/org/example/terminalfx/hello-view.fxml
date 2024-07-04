@@ -246,32 +246,32 @@
                <font>
                   <Font name="Arial Bold" size="25.0" />
                </font></Label>
-            <Label layoutX="272.0" layoutY="168.0" prefHeight="54.0" prefWidth="199.0" text="Wähle ein Angebot aus:">
+            <Label alignment="CENTER" layoutX="249.0" layoutY="169.0" prefHeight="54.0" prefWidth="253.0" text="Wähle ein Angebot aus:">
                <font>
-                  <Font name="Arial" size="15.0" />
+                  <Font name="Arial Bold" size="15.0" />
                </font>
             </Label>
             <ChoiceBox fx:id="angebotChoice" layoutX="484.0" layoutY="183.0" prefWidth="150.0" />
             <Label fx:id="angbeschreibungLabel" layoutX="694.0" layoutY="169.0" prefHeight="54.0" prefWidth="506.0" text="noch kein angebot ausgewählt">
                <font>
-                  <Font name="Arial Italic" size="15.0" />
+                  <Font name="Arial Bold Italic" size="15.0" />
                </font>
             </Label>
-            <Label layoutX="200.0" layoutY="250.0" prefHeight="54.0" prefWidth="271.0" text="Wann soll dein Vertrag beginnen?">
+            <Label layoutX="215.0" layoutY="251.0" prefHeight="54.0" prefWidth="271.0" text="Wann soll dein Vertrag beginnen?">
                <font>
-                  <Font name="Arial" size="15.0" />
+                  <Font name="Arial Bold" size="15.0" />
                </font>
             </Label>
             <DatePicker fx:id="beginnChoice" editable="false" layoutX="486.0" layoutY="265.0" />
             <Label layoutX="61.0" layoutY="333.0" prefHeight="54.0" prefWidth="422.0" text="Was für eine Laufzeit soll der Vertrag haben? (in Jahren)">
                <font>
-                  <Font name="Arial" size="15.0" />
+                  <Font name="Arial Bold" size="15.0" />
                </font>
             </Label>
             <ChoiceBox fx:id="dauerChoice" layoutX="484.0" layoutY="348.0" prefWidth="150.0" />
             <Label layoutX="155.0" layoutY="408.0" prefHeight="54.0" prefWidth="338.0" text="Warum willst du diesen Antrag beantragen?">
                <font>
-                  <Font name="Arial" size="15.0" />
+                  <Font name="Arial Bold" size="15.0" />
                </font>
             </Label>
             <TextArea fx:id="grundTF" layoutX="486.0" layoutY="426.0" prefHeight="161.0" prefWidth="718.0" promptText="gib hier deine Beweggründe an">
@@ -300,7 +300,7 @@
                   </ImageView>
                </graphic>
                <font>
-                  <Font name="Arial" size="15.0" />
+                  <Font name="Arial Bold" size="15.0" />
                </font>
             </JFXButton>
          </children>
