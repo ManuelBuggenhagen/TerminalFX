@@ -1,9 +1,12 @@
 package org.example.terminalfx;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import oracle.jdbc.OracleTypes;
 
@@ -12,7 +15,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -45,6 +47,8 @@ public class Controller implements Initializable {
     @FXML
     private JFXButton sendenBT;
     @FXML
+    private JFXButton einspruchBT;
+    @FXML
     private Label nameLabel;
     @FXML
     private Label vornameLB;
@@ -59,13 +63,7 @@ public class Controller implements Initializable {
     @FXML
     private Label gefangnissLB;
     @FXML
-    private Label punkteLB;
-    @FXML
     private Label kontoLB;
-    @FXML
-    private Label allevertrageLB;
-    @FXML
-    private Label erstelltamLB;
     @FXML
     private Label angbeschreibungLabel;
     @FXML
@@ -77,7 +75,34 @@ public class Controller implements Initializable {
     @FXML
     private ChoiceBox<String> dauerChoice;
     @FXML
+    private ChoiceBox<String> vertragChoice;
+    @FXML
     private DatePicker beginnChoice;
+
+    @FXML
+    private TableView<Vertrag> table;
+    @FXML
+    private TableColumn<Vertrag, Integer> vertragidCL;
+    @FXML
+    private TableColumn<Vertrag, String> angebotCL;
+    @FXML
+    private TableColumn<Vertrag, String> beginnCL;
+    @FXML
+    private TableColumn<Vertrag, String> endeCL;
+    @FXML
+    private TableColumn<Vertrag, Float> vergutungCL;
+    @FXML
+    private TableColumn<Vertrag, String> zustandCL;
+    @FXML
+    private TableColumn<Vertrag, String> notizGECL;
+    @FXML
+    private TableColumn<Vertrag, String> notizINCL;
+
+
+    Vertrag test1 = new Vertrag(10, "angebot1", "10/12/2545", "12/435/4545", 145.6F, "gut", "ich hasse euch", "ich liebe euch");
+    Vertrag test2 = new Vertrag(23, "angebot2", "10/12/2545", "12/435/4545", 145.6F, "medium", "ich hasse euch", "ich liebe euch");
+    Vertrag test3 = new Vertrag(45, "angebot3", "10/12/2545", "12/435/4545", 145.6F, "schlecht", "ich hasse euch", "ich liebe euch");
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -134,10 +159,32 @@ public class Controller implements Initializable {
         });
 
         profilBT.setOnMouseClicked(event -> {
+            vertragChoice.getItems().clear();
+            vertragChoice.getItems().addAll("alle meine Verträge", "Einspruch erheben", "Vertrag unterschreiben");
+            vertragChoice.setValue("alle meine Verträge");
             fillPrisonerData();
             mainWindowAP.setVisible(false);
             profilAP.setVisible(true);
         });
+
+        vertragChoice.setOnAction(event -> {
+            String val = vertragChoice.getValue();
+            switch (val){
+                case "alle meine Verträge":
+                    fillVertragTable(0);
+                    break;
+                case "Einspruch erheben":
+                    fillVertragTable(1);
+                    break;
+                case "Vertrag unterschreiben":
+                    fillVertragTable(2);
+                    break;
+                default:
+                    fillVertragTable(0);
+                    break;
+            }
+        });
+
 
         zuruckBT1.setOnMouseClicked(event -> {
             vertragAP.setVisible(false);
@@ -269,7 +316,6 @@ public class Controller implements Initializable {
             String command = "{call new_vertrag(?,?,?,?,?)}";
             CallableStatement cs = con.prepareCall(command);
 
-
             int angID = angebotsIDList.get(angebotChoice.getSelectionModel().getSelectedIndex());
             System.out.println("angID: " + angID);
             int insID = userID;
@@ -331,31 +377,25 @@ public class Controller implements Initializable {
             String url = "jdbc:oracle:thin:@rs03-db-inf-min.ad.fh-bielefeld.de:1521:ORCL";
             conn = DriverManager.getConnection(url, username, passwort);
             System.out.println("connected successfully!");
-            String query = "{call getGefangenenDaten(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            String query = "{call get_Profile_Data(?, ?, ?, ?, ?, ?, ?, ?)}";
             CallableStatement stmt = conn.prepareCall(query);
             stmt.setInt(1, userID);
             stmt.registerOutParameter(2, Types.VARCHAR);
             stmt.registerOutParameter(3, Types.VARCHAR);
             stmt.registerOutParameter(4, Types.VARCHAR);
-            stmt.registerOutParameter(5, Types.VARCHAR);
+            stmt.registerOutParameter(5, Types.NUMERIC);
             stmt.registerOutParameter(6, Types.VARCHAR);
-            stmt.registerOutParameter(7, Types.VARCHAR);
-            stmt.registerOutParameter(8, Types.NUMERIC);
-            stmt.registerOutParameter(9, Types.NUMERIC);
-            stmt.registerOutParameter(10, Types.VARCHAR);
-            stmt.registerOutParameter(11, Types.DATE);
+            stmt.registerOutParameter(7, Types.NUMERIC);
+            stmt.registerOutParameter(8, Types.VARCHAR);
             stmt.execute();
 
             vornameLB.setText(stmt.getString(2));
             nachnameLB.setText(stmt.getString(3));
-            wohnortLB.setText(stmt.getString(4));
-            geburtsdatumLB.setText(stmt.getString(5));
-            zelleLB.setText(stmt.getString(6));
-            gefangnissLB.setText(stmt.getString(7));
-            punkteLB.setText(stmt.getString(8));
-            kontoLB.setText(stmt.getString(9));
-            allevertrageLB.setText(stmt.getString(10));
-            erstelltamLB.setText(String.valueOf(stmt.getDate(11)));
+            geburtsdatumLB.setText(stmt.getString(4));
+            zelleLB.setText(stmt.getString(5));
+            gefangnissLB.setText(stmt.getString(6));
+            kontoLB.setText(stmt.getString(7));
+            wohnortLB.setText(stmt.getString(8));
 
             conn.close();
 
@@ -369,6 +409,91 @@ public class Controller implements Initializable {
             }
         }
 
+    }
+
+    private void fillVertragTable(int input) {
+        vertragidCL.setCellValueFactory(new PropertyValueFactory<>("vertragid"));
+        angebotCL.setCellValueFactory(new PropertyValueFactory<>("angebot"));
+        beginnCL.setCellValueFactory(new PropertyValueFactory<>("beginn"));
+        endeCL.setCellValueFactory(new PropertyValueFactory<>("ende"));
+        vergutungCL.setCellValueFactory(new PropertyValueFactory<>("vergutung"));
+        zustandCL.setCellValueFactory(new PropertyValueFactory<>("zustand"));
+        notizGECL.setCellValueFactory(new PropertyValueFactory<>("notizG"));
+        notizINCL.setCellValueFactory(new PropertyValueFactory<>("notizI"));
+
+        vertragidCL.setReorderable(false);
+        angebotCL.setReorderable(false);
+        beginnCL.setReorderable(false);
+        endeCL.setReorderable(false);
+        vergutungCL.setReorderable(false);
+        zustandCL.setReorderable(false);
+        notizGECL.setReorderable(false);
+        notizINCL.setReorderable(false);
+
+        Vertrag[] vertragsArray = vertrageInsasse(input);
+        assert vertragsArray != null;
+        ObservableList<Vertrag> list = FXCollections.observableArrayList(vertragsArray);
+        table.setItems(list);
+    }
+
+    private Vertrag[] vertrageInsasse(int auswahl) {
+        Connection con = null;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            String username = "DieKnastiGmbH";
+            String passwort = "DieKnastiGmbH";
+            String url = "jdbc:oracle:thin:@rs03-db-inf-min.ad.fh-bielefeld.de:1521:ORCL";
+            con = DriverManager.getConnection(url, username, passwort);
+            System.out.println("connected successfully!");
+
+            String command = "{call get_vertrage(?,?,?)}";
+            CallableStatement cs = con.prepareCall(command);
+
+            cs.setInt(1, userID);
+            cs.setInt(2, auswahl);
+            cs.registerOutParameter(3, OracleTypes.CURSOR);
+            cs.execute();
+            ResultSet rs = (ResultSet) cs.getObject(3);
+
+            ArrayList<Vertrag> vertragList = new ArrayList<>();
+
+            while (rs.next()) {
+                vertragList.add(
+                        new Vertrag(rs.getInt(1),
+                                rs.getString(2),
+                                formatDate(rs.getString(3)),
+                                formatDate(rs.getString(4)),
+                                rs.getFloat(5),
+                                rs.getString(6),
+                                rs.getString(7),
+                                rs.getString(8)
+                        )
+                );
+                //System.out.println("beginn: "+ rs.getString(3));
+            }
+
+            con.close();
+            System.out.println("con closed!");
+            return vertragList.toArray(new Vertrag[0]);
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            try {
+                assert con != null;
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return null;
+    }
+
+    private String formatDate(String input) {
+        if (input != null) {
+            return input.substring(0, 10);
+        } else {
+            return input;
+        }
     }
 
 
