@@ -49,6 +49,10 @@ public class Controller implements Initializable {
     @FXML
     private JFXButton einspruchBT;
     @FXML
+    private JFXButton unterschreibenBT;
+    @FXML
+    private JFXButton notUnterschreibenBT;
+    @FXML
     private Label nameLabel;
     @FXML
     private Label vornameLB;
@@ -97,11 +101,6 @@ public class Controller implements Initializable {
     private TableColumn<Vertrag, String> notizGECL;
     @FXML
     private TableColumn<Vertrag, String> notizINCL;
-
-
-    Vertrag test1 = new Vertrag(10, "angebot1", "10/12/2545", "12/435/4545", 145.6F, "gut", "ich hasse euch", "ich liebe euch");
-    Vertrag test2 = new Vertrag(23, "angebot2", "10/12/2545", "12/435/4545", 145.6F, "medium", "ich hasse euch", "ich liebe euch");
-    Vertrag test3 = new Vertrag(45, "angebot3", "10/12/2545", "12/435/4545", 145.6F, "schlecht", "ich hasse euch", "ich liebe euch");
 
 
     @Override
@@ -169,19 +168,61 @@ public class Controller implements Initializable {
 
         vertragChoice.setOnAction(event -> {
             String val = vertragChoice.getValue();
-            switch (val){
+            switch (val) {
                 case "alle meine Verträge":
                     fillVertragTable(0);
+                    unterschreibenBT.setDisable(true);
+                    notUnterschreibenBT.setDisable(true);
+                    einspruchBT.setDisable(true);
                     break;
                 case "Einspruch erheben":
                     fillVertragTable(1);
+                    unterschreibenBT.setDisable(true);
+                    notUnterschreibenBT.setDisable(true);
+                    einspruchBT.setDisable(false);
                     break;
                 case "Vertrag unterschreiben":
                     fillVertragTable(2);
+                    unterschreibenBT.setDisable(false);
+                    notUnterschreibenBT.setDisable(false);
+                    einspruchBT.setDisable(true);
                     break;
                 default:
                     fillVertragTable(0);
+                    unterschreibenBT.setDisable(true);
+                    notUnterschreibenBT.setDisable(true);
+                    einspruchBT.setDisable(true);
                     break;
+            }
+        });
+
+        einspruchBT.setOnMouseClicked(event -> {
+            if (table.getSelectionModel().selectedItemProperty().isNotNull().get()) {
+                Vertrag selected = table.getSelectionModel().getSelectedItem();
+                int selectedVertragID = selected.getVertragid();
+                manageVertrag(selectedVertragID,0);
+                System.out.println("Der Insasse hat Einspruch eingelegt");
+                fillVertragTable(1);
+            }
+        });
+
+        unterschreibenBT.setOnMouseClicked(event -> {
+            if (table.getSelectionModel().selectedItemProperty().isNotNull().get()) {
+                Vertrag selected = table.getSelectionModel().getSelectedItem();
+                int selectedVertragID = selected.getVertragid();
+                manageVertrag(selectedVertragID,1);
+                System.out.println("Vertrag wurde unterschrieben");
+                fillVertragTable(2);
+            }
+        });
+
+        notUnterschreibenBT.setOnMouseClicked(event -> {
+            if (table.getSelectionModel().selectedItemProperty().isNotNull().get()) {
+                Vertrag selected = table.getSelectionModel().getSelectedItem();
+                int selectedVertragID = selected.getVertragid();
+                manageVertrag(selectedVertragID,2);
+                System.out.println("Vertrag wurde nicht unterschrieben");
+                table.refresh();
             }
         });
 
@@ -493,6 +534,37 @@ public class Controller implements Initializable {
             return input.substring(0, 10);
         } else {
             return input;
+        }
+    }
+
+    private void manageVertrag(int verID, int auswahl) {
+        Connection con = null;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            String username = "DieKnastiGmbH";
+            String passwort = "DieKnastiGmbH";
+            String url = "jdbc:oracle:thin:@rs03-db-inf-min.ad.fh-bielefeld.de:1521:ORCL";
+            con = DriverManager.getConnection(url, username, passwort);
+            System.out.println("connected successfully!");
+
+            String command = "{call manage_vertrag(?,?)}";
+            CallableStatement cs = con.prepareCall(command);
+
+            cs.setInt(1, verID);
+            cs.setInt(2, auswahl);
+            cs.execute();
+
+            con.close();
+            System.out.println("con closed!");
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            try {
+                assert con != null;
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 

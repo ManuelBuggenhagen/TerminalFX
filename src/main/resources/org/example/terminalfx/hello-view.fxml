@@ -18,7 +18,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.terminalfx.Controller">
    <children>
-      <AnchorPane fx:id="loginAP" prefHeight="720.0" prefWidth="1280.0" visible="false">
+      <AnchorPane fx:id="loginAP" prefHeight="720.0" prefWidth="1280.0">
          <children>
             <JFXButton fx:id="loginBT" contentDisplay="TOP" layoutX="519.0" layoutY="480.0" prefHeight="114.0" prefWidth="193.0" styleClass="loginBT" text=" ">
                <graphic>
@@ -102,7 +102,7 @@
             </GridPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="profilAP" prefHeight="720.0" prefWidth="1280.0">
+      <AnchorPane fx:id="profilAP" prefHeight="720.0" prefWidth="1280.0" visible="false">
          <children>
             <Label layoutX="387.0" layoutY="26.0" prefHeight="71.0" prefWidth="506.0" text="Hier können sie ihr Profil einsehen:">
                <font>
@@ -223,10 +223,41 @@
               </columns>
             </TableView>
             <ChoiceBox fx:id="vertragChoice" layoutX="719.0" layoutY="390.0" prefWidth="150.0" />
-            <JFXButton fx:id="einspruchBT" buttonType="RAISED" layoutX="549.0" layoutY="650.0" prefHeight="33.0" prefWidth="183.0" styleClass="loginBT" text="Einspruch einlegen">
+            <JFXButton fx:id="einspruchBT" buttonType="RAISED" layoutX="869.0" layoutY="641.0" prefHeight="40.0" prefWidth="253.0" styleClass="loginBT" text="Einspruch einlegen">
                <font>
                   <Font name="Arial Bold" size="15.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="49.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/einspruch.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="unterschreibenBT" buttonType="RAISED" layoutX="96.0" layoutY="640.0" prefHeight="55.0" prefWidth="237.0" styleClass="loginBT" text="unterschreiben">
+               <font>
+                  <Font name="Arial Bold" size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="45.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/sign.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="notUnterschreibenBT" buttonType="RAISED" layoutX="350.0" layoutY="641.0" prefHeight="52.0" prefWidth="271.0" styleClass="loginBT" text="nicht unterschreiben">
+               <font>
+                  <Font name="Arial Bold" size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="42.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/resignation.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </JFXButton>
          </children>
       </AnchorPane>
@@ -295,7 +326,7 @@
             </JFXButton>
          </children>
       </AnchorPane>
-      <ImageView fitHeight="720.0" fitWidth="1280.0" mouseTransparent="true" opacity="0.1" pickOnBounds="true" visible="false">
+      <ImageView fitHeight="720.0" fitWidth="1280.0" mouseTransparent="true" opacity="0.1" pickOnBounds="true">
          <image>
             <Image url="@images/logo.png" />
          </image>
