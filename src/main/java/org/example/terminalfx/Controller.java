@@ -106,6 +106,8 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        vertragChoice.getItems().addAll("alle meine Verträge", "Einspruch erheben", "Vertrag unterschreiben");
+
         loginBT.setOnMouseClicked(event -> {
             if (onlyNumbers(loginTB.getText()) && !loginTB.getText().isEmpty()) {
                 userID = Integer.parseInt(loginTB.getText());
@@ -158,8 +160,6 @@ public class Controller implements Initializable {
         });
 
         profilBT.setOnMouseClicked(event -> {
-            vertragChoice.getItems().clear();
-            vertragChoice.getItems().addAll("alle meine Verträge", "Einspruch erheben", "Vertrag unterschreiben");
             vertragChoice.setValue("alle meine Verträge");
             fillPrisonerData();
             mainWindowAP.setVisible(false);
@@ -168,6 +168,7 @@ public class Controller implements Initializable {
 
         vertragChoice.setOnAction(event -> {
             String val = vertragChoice.getValue();
+
             switch (val) {
                 case "alle meine Verträge":
                     fillVertragTable(0);
@@ -203,6 +204,11 @@ public class Controller implements Initializable {
                 manageVertrag(selectedVertragID,0);
                 System.out.println("Der Insasse hat Einspruch eingelegt");
                 fillVertragTable(1);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Erfolg");
+                alert.setHeaderText("Einspruch eingelegt");
+                alert.setContentText("Sie haben gegen einen Vertrag Einspruch eingelegt");
+                alert.showAndWait();
             }
         });
 
@@ -213,6 +219,11 @@ public class Controller implements Initializable {
                 manageVertrag(selectedVertragID,1);
                 System.out.println("Vertrag wurde unterschrieben");
                 fillVertragTable(2);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Erfolg");
+                alert.setHeaderText("Vertrag wurde unterschrieben");
+                alert.setContentText("Sie haben erfolgreich einen Vertrag unterschrieben. Dieser ist jetzt rechtskräftig");
+                alert.showAndWait();
             }
         });
 
@@ -223,6 +234,11 @@ public class Controller implements Initializable {
                 manageVertrag(selectedVertragID,2);
                 System.out.println("Vertrag wurde nicht unterschrieben");
                 table.refresh();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Erfolg");
+                alert.setHeaderText("Vertrag wurde nicht unterschrieben");
+                alert.setContentText("Sie haben einen Vertrag nicht unterschrieben. Der Vertrag gilt somit als abgelehnt");
+                alert.showAndWait();
             }
         });
 
@@ -245,12 +261,15 @@ public class Controller implements Initializable {
         });
 
         sendenBT.setOnMouseClicked(event -> {
-            if (true) {
-                sendVertrag();
+            sendVertrag();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erfolg");
+            alert.setHeaderText("Vertrag gesendet");
+            alert.setContentText("Sie haben erfolgreich einen neuen Vertrag beantragt");
+            if (alert.showAndWait().get() == ButtonType.OK) {
                 vertragAP.setVisible(false);
                 mainWindowAP.setVisible(true);
-            } else {
-                System.out.println("kommt noch");
+                System.out.println("Vertrag erfolgreich beantragt");
             }
         });
 
@@ -278,7 +297,6 @@ public class Controller implements Initializable {
                 cs.execute();
                 this.userName = cs.getString(2);
                 this.secondName = cs.getString(3);
-                //System.out.println("stored procedure result: " + this.userName + "  " + secondName);
                 con.close();
                 return true;
             } catch (Exception e) {
@@ -510,7 +528,6 @@ public class Controller implements Initializable {
                                 rs.getString(8)
                         )
                 );
-                //System.out.println("beginn: "+ rs.getString(3));
             }
 
             con.close();
