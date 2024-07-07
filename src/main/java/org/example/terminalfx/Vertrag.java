@@ -10,6 +10,7 @@ public class Vertrag {
     private String notizG;
     private String notizI;
 
+    //Constructor for valid Vertrag objects
     public Vertrag(int vertragid, String angebot, String beginn, String ende, float vergutung, String zustand, String notizG, String notizI) {
         this.vertragid = vertragid;
         this.angebot = angebot;

@@ -103,11 +103,13 @@ public class Controller implements Initializable {
     private TableColumn<Vertrag, String> notizINCL;
 
 
+    //method to handle interactions with UI components after they habe been initialized
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         vertragChoice.getItems().addAll("alle meine Verträge", "Einspruch erheben", "Vertrag unterschreiben");
 
+        //Event : Login button was clicked
         loginBT.setOnMouseClicked(event -> {
             if (onlyNumbers(loginTB.getText()) && !loginTB.getText().isEmpty()) {
                 userID = Integer.parseInt(loginTB.getText());
@@ -136,12 +138,14 @@ public class Controller implements Initializable {
             }
         });
 
+        //Event : Logout button was clicked
         logoutBT.setOnMouseClicked(event -> {
             loginTB.clear();
             mainWindowAP.setVisible(false);
             loginAP.setVisible(true);
         });
 
+        //Event : Vertrag button was clicked
         vertragBT.setOnMouseClicked(event -> {
 
             beginnChoice.getEditor().clear();
@@ -159,6 +163,7 @@ public class Controller implements Initializable {
             vertragAP.setVisible(true);
         });
 
+        //Event : Profil button was clicked
         profilBT.setOnMouseClicked(event -> {
             vertragChoice.setValue("alle meine Verträge");
             fillPrisonerData();
@@ -166,6 +171,7 @@ public class Controller implements Initializable {
             profilAP.setVisible(true);
         });
 
+        //Event : vertrag choice box was interacted with
         vertragChoice.setOnAction(event -> {
             String val = vertragChoice.getValue();
 
@@ -197,6 +203,7 @@ public class Controller implements Initializable {
             }
         });
 
+        //Event : Einspruch button was clicked
         einspruchBT.setOnMouseClicked(event -> {
             if (table.getSelectionModel().selectedItemProperty().isNotNull().get()) {
                 Vertrag selected = table.getSelectionModel().getSelectedItem();
@@ -212,6 +219,7 @@ public class Controller implements Initializable {
             }
         });
 
+        //Event: Unterschreiben button was clicked
         unterschreibenBT.setOnMouseClicked(event -> {
             if (table.getSelectionModel().selectedItemProperty().isNotNull().get()) {
                 Vertrag selected = table.getSelectionModel().getSelectedItem();
@@ -227,6 +235,7 @@ public class Controller implements Initializable {
             }
         });
 
+        //Event: nicht unterschreiben button was clicked
         notUnterschreibenBT.setOnMouseClicked(event -> {
             if (table.getSelectionModel().selectedItemProperty().isNotNull().get()) {
                 Vertrag selected = table.getSelectionModel().getSelectedItem();
@@ -243,16 +252,19 @@ public class Controller implements Initializable {
         });
 
 
+        //Event : back to main menu button was clicked from vertrag window
         zuruckBT1.setOnMouseClicked(event -> {
             vertragAP.setVisible(false);
             mainWindowAP.setVisible(true);
         });
 
+        //Event : back to main menu button was clicked from profil window
         zuruckBT2.setOnMouseClicked(event -> {
             profilAP.setVisible(false);
             mainWindowAP.setVisible(true);
         });
 
+        //Event :interaction with angebot choice box
         angebotChoice.setOnAction(event -> {
             if (!angebotChoice.getSelectionModel().isEmpty()) {
                 String description = angebotDescrList.get(angebotChoice.getSelectionModel().getSelectedIndex());
@@ -260,6 +272,7 @@ public class Controller implements Initializable {
             }
         });
 
+        //Event : send button was clicked inside Vertrag window
         sendenBT.setOnMouseClicked(event -> {
             sendVertrag();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -276,6 +289,7 @@ public class Controller implements Initializable {
 
     }
 
+    //called when user tries to log in -> verifies the login result with stored procedure
     private boolean checkID(int id) {
         Connection con = null;
         try {
@@ -318,10 +332,12 @@ public class Controller implements Initializable {
         return false;
     }
 
+    //checks if String contains more then just allowed number. Used in login error prevention
     private boolean onlyNumbers(String s) {
         return s.chars().allMatch(Character::isDigit);
     }
 
+    //calls stored procedure to get all valid angebots options for logged in inmate
     private String[] options() {
         Connection con = null;
         try {
@@ -362,6 +378,7 @@ public class Controller implements Initializable {
         return null;
     }
 
+    //uses a stored procedure to send a new Vertrag to the database
     public void sendVertrag() {
         Connection con = null;
         try {
@@ -408,11 +425,13 @@ public class Controller implements Initializable {
         }
     }
 
+    //changes to date format so the database accepts it
     private String buildStartDate() {
         LocalDate time = beginnChoice.getValue();
         return time.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
+    //uses the start date and the time period to determine the ende date of a Vertrag
     private String calcEndDate() {
         if (dauerChoice.getValue().equals("noch nicht sicher")) {
             return null;
@@ -427,6 +446,7 @@ public class Controller implements Initializable {
         }
     }
 
+    //used to fill basic information about the inmate inside the profile window
     private void fillPrisonerData() {
         Connection conn = null;
         try {
@@ -470,6 +490,7 @@ public class Controller implements Initializable {
 
     }
 
+    //used to handle the table inside the profile window
     private void fillVertragTable(int input) {
         vertragidCL.setCellValueFactory(new PropertyValueFactory<>("vertragid"));
         angebotCL.setCellValueFactory(new PropertyValueFactory<>("angebot"));
@@ -495,6 +516,7 @@ public class Controller implements Initializable {
         table.setItems(list);
     }
 
+    //calls a stored procedure to get data for the Vertrag table inside the profile window
     private Vertrag[] vertrageInsasse(int auswahl) {
         Connection con = null;
         try {
@@ -546,6 +568,7 @@ public class Controller implements Initializable {
         return null;
     }
 
+    //formats the Date inside the profile table into a more readable version
     private String formatDate(String input) {
         if (input != null) {
             return input.substring(0, 10);
@@ -554,6 +577,7 @@ public class Controller implements Initializable {
         }
     }
 
+    //calls a stored procedure to manage "Einspruch/unterschreiben /nicht unterschreiben" buttons inside the profile window
     private void manageVertrag(int verID, int auswahl) {
         Connection con = null;
         try {

@@ -7,10 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.io.IOException;
 import java.util.Objects;
 
+//main Entry point into the application only containing some setup code
 public class MainEntry extends Application {
     double x, y;
 
