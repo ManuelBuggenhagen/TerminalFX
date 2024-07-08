@@ -166,6 +166,7 @@ public class Controller implements Initializable {
         //Event : Profil button was clicked
         profilBT.setOnMouseClicked(event -> {
             vertragChoice.setValue("alle meine Verträge");
+            fillVertragTable(0);
             fillPrisonerData();
             mainWindowAP.setVisible(false);
             profilAP.setVisible(true);
